@@ -1341,7 +1341,6 @@ static void initGUI(int numframes, gchar *notefile)
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(notePad), FALSE);
 	g_signal_connect(G_OBJECT(notePad), "key_press_event",
 			G_CALLBACK(onPadKeyPressed), NULL);
-	gtk_widget_set_size_request(notePad, 200, 50);
 
 	/* Remarks:
 	 *
@@ -1442,7 +1441,6 @@ static void initGUI(int numframes, gchar *notefile)
 		/* create a new drawing area - the pdf will be rendered in
 		 * there */
 		canvas = gtk_drawing_area_new();
-		gtk_widget_set_size_request(canvas, 100, 100);
 
 		/* add widgets to their parents. the canvas is placed in an
 		 * eventbox, the box's size_allocate signal will be handled. so,
@@ -1546,7 +1544,6 @@ static void initGUI(int numframes, gchar *notefile)
 
 	/* add a rendering area to the beamer window */
 	canvas = gtk_drawing_area_new();
-	gtk_widget_set_size_request(canvas, 320, 240);
 
 	gtk_container_add(GTK_CONTAINER(win_beamer), canvas);
 
@@ -1575,6 +1572,12 @@ static void initGUI(int numframes, gchar *notefile)
 	{
 		showNotesFromFile(notefile);
 	}
+
+	/* Set default sizes for both windows. (Note: If the widgets don't
+	 * fit into that space, the windows will be larger. Also, they are
+	 * allowed to get shrinked by the user.) */
+	gtk_window_set_default_size(GTK_WINDOW(win_preview), 640, 480);
+	gtk_window_set_default_size(GTK_WINDOW(win_beamer), 320, 240);
 
 	/* show the windows */
 	gtk_widget_show_all(win_preview);
