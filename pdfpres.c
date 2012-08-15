@@ -1163,11 +1163,18 @@ static gboolean onCanvasDraw(GtkWidget *widget, cairo_t *cr,
 			break;
 	}
 
-	/* A white background, i.e. "paper color". Push and pop cairo
-	 * contexts, so we have a clean state afterwards. */
+	/* A black background. Push and pop cairo contexts, so we have a
+	 * clean state afterwards. */
+	cairo_save(cr);
+	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_rectangle(cr, 0, 0, pp->width, pp->height);
+	cairo_fill(cr);
+	cairo_restore(cr);
+
+	/* A white background, i.e. "paper color". */
 	cairo_save(cr);
 	cairo_set_source_rgb(cr, 1, 1, 1);
-	cairo_rectangle(cr, 0, 0, pp->width, pp->height);
+	cairo_rectangle(cr, tx, ty, w, h);
 	cairo_fill(cr);
 	cairo_restore(cr);
 
