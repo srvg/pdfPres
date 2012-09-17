@@ -87,15 +87,6 @@ static void onSaveClicked(GtkWidget *widget, gpointer data);
 static void onSaveAsClicked(GtkWidget *widget, gpointer data);
 
 
-static void dieOnNull(void *ptr, int line)
-{
-	if (ptr == NULL)
-	{
-		fprintf(stderr, "Out of memory in line %d.\n", line);
-		exit(EXIT_FAILURE);
-	}
-}
-
 void setStatusText_strdup(gchar *msg)
 {
 	static gchar *curMsg = NULL;
@@ -1512,7 +1503,7 @@ static void initGUI(int numframes, gchar *notefile)
 
 		/* save info of this rendering port */
 		thisport = (struct viewport *)malloc(sizeof(struct viewport));
-		dieOnNull(thisport, __LINE__);
+		g_assert(thisport);
 		thisport->offset = transIndex;
 		thisport->canvas = canvas;
 		thisport->frame = frame;
@@ -1556,7 +1547,7 @@ static void initGUI(int numframes, gchar *notefile)
 
 	/* save info of this rendering port */
 	thisport = (struct viewport *)malloc(sizeof(struct viewport));
-	dieOnNull(thisport, __LINE__);
+	g_assert(thisport);
 	thisport->offset = 0;
 	thisport->canvas = canvas;
 	thisport->frame = NULL;
@@ -1702,7 +1693,7 @@ int main(int argc, char **argv)
 	/* note: this buffer must not be freed, it'll be used by poppler
 	 * later on. */
 	databuf = (char *)malloc(statbuf.st_size);
-	dieOnNull(databuf, __LINE__);
+	g_assert(databuf);
 
 	fp = fopen(filename, "rb");
 	if (!fp)
