@@ -38,7 +38,7 @@
 #include "notes.h"
 
 #ifndef PDFPRES_VERSION
-/* If no version has been defined yet, show net milestone. */
+/* If no version has been defined yet, show next milestone. */
 #define PDFPRES_VERSION "pdfpres-0.3-pre (non-git)"
 #endif
 
@@ -241,7 +241,7 @@ static GdkPixbuf * getRenderedPixbuf(struct viewport *pp, int mypage_i)
 				/* unref pixbuf. */
 				ci = (struct cacheItem *)(it->data);
 				if (ci->pixbuf != NULL)
-					gdk_pixbuf_unref(ci->pixbuf);
+					g_object_unref(ci->pixbuf);
 
 				/* free memory alloc'd for the struct. */
 				free(ci);
@@ -456,7 +456,7 @@ static void clearCache(void)
 		/* unref pixbuf. */
 		ci = (struct cacheItem *)(it->data);
 		if (ci->pixbuf != NULL)
-			gdk_pixbuf_unref(ci->pixbuf);
+			g_object_unref(ci->pixbuf);
 
 		/* free memory alloc'd for the struct. */
 		free(ci);
@@ -1244,6 +1244,10 @@ static gboolean onKeyPressed(GtkWidget *widget, GdkEventKey *ev,
 			if (prefs.q_exits_fullscreen && isFullScreen)
 			{
 				toggleFullScreen();
+				if (prefs.stop_timer_on_fs)
+				{
+					toggleTimer();
+				}
 			}
 			else
 			{
@@ -1269,6 +1273,7 @@ static gboolean onKeyPressed(GtkWidget *widget, GdkEventKey *ev,
 			executeJump();
 			break;
 
+		case GDK_period:
 		case GDK_b:
 			toggleBlankBeamer();
 			changed = FALSE;
